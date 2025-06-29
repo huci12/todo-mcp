@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>새 Todo 등록</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">새 Todo 등록</h2>
+
+        <!-- Todo 등록 폼 -->
+        <form th:action="@{/create}" method="post" th:object="${todoRequest}">
+            <div class="form-group">
+                <label for="title">제목 <span class="required">*</span></label>
+                <input type="text" 
+                       id="title" 
+                       name="title" 
+                       class="form-control"
+                       th:field="*{title}"
+                       th:classappend="${#fields.hasErrors('title')} ? 'error' : ''"
+                       placeholder="Todo 제목을 입력하세요"
+                       maxlength="200"
+                       required>
+                <div th:if="${#fields.hasErrors('title')}" 
+                     class="error-message" 
+                     th:errors="*{title}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">설명</label>
+                <textarea id="description" 
+                          name="description" 
+                          class="form-control"
+                          th:field="*{description}"
+                          th:classappend="${#fields.hasErrors('description')} ? 'error' : ''"
+                          placeholder="Todo에 대한 상세한 설명을 입력하세요 (선택사항)"
+                          maxlength="1000"></textarea>
+                <div th:if="${#fields.hasErrors('description')}" 
+                     class="error-message" 
+                     th:errors="*{description}"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">등록</button>
+                <a href="/" class="btn btn-secondary">취소</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

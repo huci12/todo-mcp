@@ -1,0 +1,70 @@
+# Spring Boot 애플리케이션 설정 파일
+# YAML 형식으로 작성된 설정 정보
+
+spring:
+  # 개발 도구 설정 (Spring Boot DevTools) - 최소 설정
+  devtools:
+    restart:
+      enabled: true                    # 자동 재시작만 활성화
+    livereload:
+      enabled: true                    # LiveReload 활성화
+  
+  # 데이터베이스 연결 설정
+  datasource:
+    # H2 인메모리 데이터베이스 사용
+    # 애플리케이션 종료 시 데이터가 사라짐 (테스트/개발 환경에 적합)
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa        # 기본 사용자명
+    password:           # 패스워드 없음 (빈 값)
+  
+  # H2 데이터베이스 콘솔 설정
+  h2:
+    console:
+      enabled: true           # H2 웹 콘솔 활성화
+      path: /h2-console      # 콘솔 접근 경로: http://localhost:8082/h2-console
+  
+  # JPA/Hibernate 설정
+  jpa:
+    hibernate:
+      # DDL 자동 생성 전략
+      # create-drop: 애플리케이션 시작 시 테이블 생성, 종료 시 삭제
+      ddl-auto: create-drop
+    
+    # 실행되는 SQL 쿼리를 콘솔에 출력
+    show-sql: true
+    
+    properties:
+      hibernate:
+        # SQL 쿼리를 보기 좋게 포맷팅
+        format_sql: true
+    
+    # H2 데이터베이스에 최적화된 방언(Dialect) 사용
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  # Thymeleaf 템플릿 엔진 설정
+  thymeleaf:
+    # 개발 환경에서 템플릿 캐시 비활성화 (변경사항 즉시 반영)
+    cache: false
+    # 템플릿 파일 인코딩
+    encoding: UTF-8
+    # 템플릿 모드 (HTML5 방식)
+    mode: HTML
+    # 템플릿 파일 위치
+    prefix: classpath:/templates/
+    # 템플릿 파일 확장자
+    suffix: .html
+
+# 서버 설정
+server:
+  port: 8082    # 애플리케이션이 실행될 포트 번호
+
+# 로깅 설정
+logging:
+  level:
+    # Hibernate가 실행하는 SQL을 DEBUG 레벨로 출력
+    org.hibernate.SQL: DEBUG
+    # SQL 바인딩 파라미터를 TRACE 레벨로 출력 (? 값들을 실제 값으로 표시)
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    # DevTools 로깅 레벨 설정
+    org.springframework.boot.devtools: INFO

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>회원가입</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">회원가입</h2>
+
+        <!-- 회원가입 폼 -->
+        <form th:action="@{/signup}" method="post" th:object="${userSignupRequest}">
+            <div class="form-group">
+                <label for="email">이메일 <span class="required">*</span></label>
+                <input type="email" 
+                       id="email" 
+                       name="email" 
+                       class="form-control"
+                       th:field="*{email}"
+                       th:classappend="${#fields.hasErrors('email')} ? 'error' : ''"
+                       placeholder="이메일을 입력하세요"
+                       maxlength="100"
+                       required>
+                <div th:if="${#fields.hasErrors('email')}" 
+                     class="error-message" 
+                     th:errors="*{email}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="nickname">닉네임 <span class="required">*</span></label>
+                <input type="text" 
+                       id="nickname" 
+                       name="nickname" 
+                       class="form-control"
+                       th:field="*{nickname}"
+                       th:classappend="${#fields.hasErrors('nickname')} ? 'error' : ''"
+                       placeholder="닉네임을 입력하세요"
+                       maxlength="20"
+                       required>
+                <div th:if="${#fields.hasErrors('nickname')}" 
+                     class="error-message" 
+                     th:errors="*{nickname}"></div>
+                <div style="font-size: 12px; color: #6c757d; margin-top: 5px;">
+                    2-20자, 한글/영문/숫자/_/- 만 사용 가능
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호 <span class="required">*</span></label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       class="form-control"
+                       th:field="*{password}"
+                       th:classappend="${#fields.hasErrors('password')} ? 'error' : ''"
+                       placeholder="비밀번호를 입력하세요"
+                       maxlength="50"
+                       required>
+                <div th:if="${#fields.hasErrors('password')}" 
+                     class="error-message" 
+                     th:errors="*{password}"></div>
+                <div style="font-size: 12px; color: #6c757d; margin-top: 5px;">
+                    6자 이상 50자 이하
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="passwordConfirm">비밀번호 확인 <span class="required">*</span></label>
+                <input type="password" 
+                       id="passwordConfirm" 
+                       name="passwordConfirm" 
+                       class="form-control"
+                       th:field="*{passwordConfirm}"
+                       th:classappend="${#fields.hasErrors('passwordConfirm')} ? 'error' : ''"
+                       placeholder="비밀번호를 다시 입력하세요"
+                       maxlength="50"
+                       required>
+                <div th:if="${#fields.hasErrors('passwordConfirm')}" 
+                     class="error-message" 
+                     th:errors="*{passwordConfirm}"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">회원가입</button>
+                <a href="/login" class="btn btn-secondary">취소</a>
+            </div>
+        </form>
+
+        <div class="signup-link">
+            <p>이미 계정이 있으신가요? <a href="/login">로그인</a></p>
+        </div>
+    </div>
+</body>
+</html>

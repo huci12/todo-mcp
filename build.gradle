@@ -1,0 +1,95 @@
+// Gradle 빌드 스크립트 - Kotlin DSL 대신 Groovy DSL 사용
+// Spring Boot 3.x + Kotlin 프로젝트 설정
+
+plugins {
+    // Spring Boot 플러그인 - 실행 가능한 JAR 생성 및 의존성 관리
+    id 'org.springframework.boot' version '3.2.0'
+    
+    // Spring 의존성 관리 플러그인 - Spring Boot BOM 적용
+    id 'io.spring.dependency-management' version '1.1.4'
+    
+    // Kotlin JVM 플러그인 - Kotlin 컴파일 지원
+    id 'org.jetbrains.kotlin.jvm' version '1.9.20'
+    
+    // Kotlin Spring 플러그인 - Spring 관련 Kotlin 최적화
+    // open 클래스 자동 생성 (Spring이 필요로 하는 프록시 생성을 위해)
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.20'
+    
+    // Kotlin JPA 플러그인 - JPA 엔티티 최적화
+    // 기본 생성자 자동 생성, lazy loading 지원
+    id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.20'
+}
+
+// 프로젝트 기본 정보
+group = 'org.library'                    // 그룹 ID
+version = '1.0-SNAPSHOT'                 // 버전
+java.sourceCompatibility = JavaVersion.VERSION_21  // Java 21 호환성
+
+// 의존성을 다운로드할 저장소 설정
+repositories {
+    mavenCentral()    // Maven Central Repository 사용
+}
+
+// 프로젝트 의존성 정의
+dependencies {
+    // Spring Boot Web Starter
+    // 웹 애플리케이션 개발에 필요한 의존성 (Spring MVC, Tomcat, Jackson 등)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // Spring Boot Thymeleaf Starter
+    // Thymeleaf 템플릿 엔진 및 관련 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    
+    // Thymeleaf Layout Dialect - 레이아웃 템플릿 기능
+    // 공통 레이아웃을 정의하고 각 페이지에서 상속받아 사용 가능
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'
+    
+    // Spring Boot Data JPA Starter  
+    // JPA/Hibernate 및 데이터베이스 연동에 필요한 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    
+    // Spring Boot Validation Starter
+    // Bean Validation API (JSR-303) 및 Hibernate Validator 포함
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // Spring Boot Security Starter (BCrypt 패스워드 인코더 포함)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    
+    // Spring Boot DevTools - 개발 시 자동 재시작 및 LiveReload 기능
+    // 클래스패스 변경 감지 시 애플리케이션 자동 재시작
+    // 정적 리소스 변경 시 브라우저 자동 새로고침
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    
+    // Jackson Kotlin Module
+    // JSON 직렬화/역직렬화 시 Kotlin 데이터 클래스 지원
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    
+    // Kotlin Reflection
+    // Spring Framework가 Kotlin 리플렉션을 사용하기 위해 필요
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    
+    // H2 데이터베이스
+    // 런타임에만 필요한 인메모리 데이터베이스 (개발/테스트용)
+    runtimeOnly 'com.h2database:h2'
+    
+    // Spring Boot Test Starter
+    // 테스트에 필요한 의존성 (JUnit 5, Mockito, Spring Test 등)
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+// Kotlin 컴파일 태스크 설정
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+    kotlinOptions {
+        // JSR-305 어노테이션 지원 (Nullable/NonNull 처리)
+        freeCompilerArgs += '-Xjsr305=strict'
+        
+        // JVM 21 타겟으로 컴파일
+        jvmTarget = '21'
+    }
+}
+
+// 테스트 태스크 설정
+tasks.named('test') {
+    // JUnit Platform 사용 (JUnit 5)
+    useJUnitPlatform()
+}

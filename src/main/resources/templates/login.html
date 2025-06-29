@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>로그인</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">로그인</h2>
+
+        <!-- 로그인 폼 -->
+        <form th:action="@{/login}" method="post" th:object="${userLoginRequest}">
+            <div class="form-group">
+                <label for="email">이메일 <span class="required">*</span></label>
+                <input type="email" 
+                       id="email" 
+                       name="email" 
+                       class="form-control"
+                       th:field="*{email}"
+                       th:classappend="${#fields.hasErrors('email')} ? 'error' : ''"
+                       placeholder="이메일을 입력하세요"
+                       required>
+                <div th:if="${#fields.hasErrors('email')}" 
+                     class="error-message" 
+                     th:errors="*{email}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호 <span class="required">*</span></label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       class="form-control"
+                       th:field="*{password}"
+                       th:classappend="${#fields.hasErrors('password')} ? 'error' : ''"
+                       placeholder="비밀번호를 입력하세요"
+                       required>
+                <div th:if="${#fields.hasErrors('password')}" 
+                     class="error-message" 
+                     th:errors="*{password}"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">로그인</button>
+            </div>
+        </form>
+
+        <div class="signup-link">
+            <p>아직 계정이 없으신가요? <a href="/signup">회원가입</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>Todo 목록</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <!-- Todo 목록 -->
+        <div th:if="${#lists.isEmpty(todos)}" class="empty-message">
+            등록된 Todo가 없습니다. 새로운 Todo를 등록해보세요!
+        </div>
+
+        <ul th:if="${!#lists.isEmpty(todos)}" class="todo-list">
+            <li th:each="todo : ${todos}" 
+                th:class="${todo.isDone} ? 'todo-item completed' : 'todo-item'">
+                
+                <form th:action="@{/toggle/{id}(id=${todo.id})}" method="post" style="margin: 0;">
+                    <input type="checkbox" 
+                           th:checked="${todo.isDone}"
+                           class="checkbox"
+                           onchange="this.form.submit()">
+                </form>
+                
+                <div class="todo-content">
+                    <div class="todo-title" th:text="${todo.title}">Todo 제목</div>
+                    <div th:if="${todo.description}" 
+                         class="todo-description" 
+                         th:text="${todo.description}">Todo 설명</div>
+                </div>
+                
+                <div class="todo-actions">
+                    <form th:action="@{/delete/{id}(id=${todo.id})}" method="post" 
+                          style="margin: 0;" 
+                          onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                        <button type="submit" class="btn btn-danger">삭제</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
